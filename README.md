@@ -6,7 +6,7 @@ An app to display profile pictures of registered users built with React, Node, E
 
 ## Preview
 
-`uploads/preview.mp4`
+<video src="uploads/preview.mp4" width="100%" controls muted autoplay loop></video>
 
 ---
 
