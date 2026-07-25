@@ -6,11 +6,11 @@ An app to display profile pictures of registered users built with React, Node, E
 
 ## Preview
 
-<video src="uploads/preview.mp4" controls autoplay loop></video>
+https://github.com/user-attachments/assets/6aa96b60-7846-47d5-8ec4-8c05b44ac90d
 
 ---
 
-### Technologies
+## Technologies
 
 ### Frontend
 
@@ -18,8 +18,6 @@ An app to display profile pictures of registered users built with React, Node, E
 - `TypeScript`
 - `Tailwind CSS`
 - `Framer Motion`
-
----
 
 ### Backend
 
