@@ -9,6 +9,7 @@ import { useAuth } from '@/context/AuthContext';
 import { ThemeToggle } from '@/components/ThemeToggle';
 import Login from '@/pages/login';
 import Register from '@/pages/register';
+import EditProfile from '@/pages/editProfile';
 
 function App() {
   const [users, setUsers] = useState<User[]>([]);
@@ -39,7 +40,6 @@ function App() {
       setCurrentIndex((prev) => (prev + 1) % users.length);
     }, 1500);
     return () => clearInterval(interval);
-
   }, [users]);
 
   const buttonText = isLoggedIn ? "Modificar Perfil" : "Iniciar Sesion";
@@ -48,7 +48,7 @@ function App() {
 
   const handleAuthButtonClick = () => {
     if(isLoggedIn) {
-      navigate('/');
+      navigate('/pages/edit-profile');
     } else {
       navigate('/pages/login');
     }
@@ -88,7 +88,7 @@ function App() {
 
     <Routes>
       <Route path='/' element={
-        <div className="min-h-screen bg-white dark:bg-gray-950 text-black dark:text-white transition-colors duration-300 p-8">
+        <div className="min-h-screen bg-white dark:bg-[#393A41] text-black dark:text-white transition-colors duration-300 p-8">
           <header className="flex items-center justify-between pb-8 border-b border-gray-800">
             <h1 className="text-4xl font-bold">Dynamic PFP Showcase</h1>
             <div className='w-36'>
@@ -125,6 +125,7 @@ function App() {
 
       <Route path='/pages/login' element={<Login/>}/>
       <Route path='/pages/register' element={<Register/>} />
+      <Route path="/pages/edit-profile" element={<EditProfile/>} />
     </Routes>
     
   );

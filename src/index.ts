@@ -193,7 +193,53 @@ app.post('/api/users/:id/img', upload.single('img'), async (req: Request, res: R
     }
 });
 
-// Devuelve los usuarios registrados-----------------------------------------------------------------------
+// Modificar nombre de usuario -----------------------------------------------------------------------
+
+app.patch('/api/users/:id/username', async (req: Request, res: Response): Promise<any> => {
+ 
+    const userId = req.params.id;
+    const { userName } = req.body;
+ 
+    if (!userName || typeof userName !== 'string' || !userName.trim()) {
+        return res.status(400).json({ error: 'Nombre de usuario requerido' });
+    }
+ 
+    const trimmedName = userName.trim();
+ 
+    try {
+ 
+        const query = `
+            UPDATE usuarios
+            SET user_name = $2
+            WHERE id = $1
+            RETURNING id, user_name;
+        `;
+ 
+        const values = [userId, trimmedName];
+ 
+        const userActualizado = await db.get(query, values);
+ 
+        if (!userActualizado) {
+            return res.status(404).json({ error: 'Usuario no encontrado' });
+        }
+ 
+        res.json({
+            mensaje: 'Nombre de usuario actualizado con éxito',
+            user: userActualizado
+        });
+ 
+    } catch (error: any) {
+        console.error('Error al actualizar el nombre de usuario', error);
+ 
+        if (error.code === 'SQLITE_CONSTRAINT') {
+            return res.status(400).json({ error: 'Ese nombre de usuario ya está en uso' });
+        }
+ 
+        res.status(500).json({ error: 'Error interno del servidor' });
+    }
+});
+
+// Devuelve los usuarios registrados -----------------------------------------------------------------------
 
 app.get('/api/users', async (req: Request, res: Response) => {
     
@@ -211,6 +257,23 @@ app.get('/api/users', async (req: Request, res: Response) => {
 
     } catch(error) {
         console.error('No se pudo fetchear los usuarios de la db', error);
+        res.status(500).json({ error: 'Error al consultar la db' });
+    }
+});
+
+// Busca un usuario en especifico -----------------------------------------------------------------------
+
+app.get('/api/users/:id', async (req: Request, res: Response) => {
+    try {
+        const user = await db.get(`
+            SELECT id, user_name, pfp_url FROM usuarios WHERE id = $1;
+        `, [req.params.id]);
+
+        const result = await db.all(user);
+
+        if (!result) return res.status(404).json({ error: 'Usuario no encontrado' });
+        res.json(result);
+    } catch (error) {
         res.status(500).json({ error: 'Error al consultar la db' });
     }
 });
